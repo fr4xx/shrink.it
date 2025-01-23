@@ -5,8 +5,9 @@
 	>
 		<router-link
 			class="nav-link"
+			:to="link.path"
 			:class="isActive"
-			href="#"
+			:index="index"
 		>
 			{{ link.title }}
 		</router-link>
@@ -22,3 +23,9 @@ const navbarLinks = [
 	{ title: "Contact", path: "/contact" },
 ];
 </script>
+
+<style scoped>
+router-link.nav-link {
+	cursor: pointer;
+}
+</style>
