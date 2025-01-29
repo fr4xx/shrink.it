@@ -1,13 +1,12 @@
 <template>
 	<li
-		v-for="(link, index) in navbarLinks"
+		v-for="link in navbarLinks"
 		class="nav-item"
 	>
 		<router-link
 			class="nav-link"
+			active-class="active"
 			:to="link.path"
-			:class="isActive"
-			:index="index"
 		>
 			{{ link.title }}
 		</router-link>
