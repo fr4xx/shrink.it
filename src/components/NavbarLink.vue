@@ -1,6 +1,6 @@
 <template>
 	<li
-		v-for="link in navbarLinks"
+		v-for="link in links"
 		class="nav-item"
 	>
 		<router-link
@@ -16,11 +16,9 @@
 <script setup>
 import { ref, reactive } from "vue";
 
-const navbarLinks = [
-	{ title: "Dashboard", path: "/dashboard" },
-	{ title: "About", path: "/about" },
-	{ title: "Contact", path: "/contact" },
-];
+defineProps({
+	links: Array,
+});
 </script>
 
 <style scoped>
