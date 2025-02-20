@@ -37,9 +37,15 @@
 				<a
 					:href="shortenedUrl"
 					target="_blank"
+					>{{ shortenedUrl }}</a
 				>
-					{{ shortenedUrl }}
-				</a>
+			</p>
+
+			<p
+				v-if="urlError"
+				class="mt-2 text-danger"
+			>
+				Please enter a valid URL.
 			</p>
 
 			<p class="mt-4">
@@ -59,15 +65,37 @@ import { ref } from "vue";
 
 const url = ref("");
 const shortenedUrl = ref("");
+const urlError = ref(false);
 
-function shortenUrl() {
-	// Simple logic for the demo: appends a random string to simulate URL shortening
-	if (url.value) {
-		shortenedUrl.value = `https://short.ly/${Math.random()
-			.toString(36)
-			.substring(2, 8)}`;
+async function shortenUrl() {
+	// Simple validation for a valid URL format
+	const urlPattern = /^(https?:\/\/)([\w\d-]+\.)+[a-z]{2,}(:\d+)?(\/[^\s]*)?$/;
+
+	if (url.value && urlPattern.test(url.value)) {
+		// Make a POST request to your Node.js server
+		try {
+			const response = await fetch("http://10.250.2.217:3000/shorten", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ longUrl: url.value }),
+			});
+			const data = await response.json();
+			if (data.shortUrl) {
+				shortenedUrl.value = data.shortUrl;
+				url.value = ""; // Clear input field after submission
+				urlError.value = false; // Reset error state
+			} else {
+				urlError.value = true;
+			}
+		} catch (error) {
+			console.error("Error shortening URL:", error);
+			urlError.value = true;
+		}
 	} else {
-		alert("Please enter a URL!");
+		urlError.value = true;
+		shortenedUrl.value = ""; // Clear any previous shortened URL
 	}
 }
 </script>
